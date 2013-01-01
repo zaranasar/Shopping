@@ -1,0 +1,32 @@
+﻿@{
+    if(User.IsInRole("Admin"))
+    {
+        var db = Database.Open("WebSecurity");
+        var q = "SELECT * FROM Product ";
+        var data = db.Query(q);  
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <table>
+       @foreach(var row in data)
+       {
+         <tr>
+             <td> <img src="@Href("~/"+@val.Image)" alt="Imaage">
+             <td>@row.Name</td>
+             <td>@row.Description</td>
+             <td>@row.Price</td>
+             <td>@row.Quantity</td>
+             
+         </tr>
+     } 
+            </table>
+    </body>
+</html>

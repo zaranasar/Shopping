@@ -1,0 +1,45 @@
+﻿@{
+    if(User.IsInRole("Admin"))
+    {
+        var db = Database.Open("WebSecurity");
+        var selectQueryString = "SELECT * FROM Category ORDER BY Name";
+        var data=db.Query(selectQueryString);
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Products</title>
+    <style type="text/css">
+        table, th, td {
+          border: solid 1px #bbbbbb;
+          border-collapse: collapse;
+          padding: 2px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Small Bakery Products</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var row in data) {
+          <tr>
+
+            <td>@row.Name</td>
+                    <td><a href="@Href("~/Shared/Admin/DeleteCategory", row.CId)">Delete</a></td>
+                    <td><a href="@Href("~/Shared/Admin/Lecture13/UpdateCategory.cshtml", row.Id)">Update</a></td>
+    
+          </tr>
+        }
+      </tbody>
+    </table>
+</body>
+</html>

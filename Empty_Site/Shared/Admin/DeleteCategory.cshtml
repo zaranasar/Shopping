@@ -1,0 +1,31 @@
+﻿@{
+  var db = Database.Open("WebSecurity");
+  var ProductId = UrlData[0];
+  if (ProductId.IsEmpty()) {
+      Response.Redirect("~/Shared/Admin/ListForDeleteCat.cshtml");
+  }
+  var prod = db.QuerySingle("SELECT * FROM Category WHERE CID = @0", ProductId);
+  if( IsPost && !ProductId.IsEmpty()) {
+    var deleteQueryString = "DELETE FROM Category WHERE CId=@0";
+    db.Execute(deleteQueryString, ProductId);
+    Response.Redirect("~/Shared/Admin/ListForDeleteCat.cshtml");
+  }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+     title>Delete Product</title>
+</head>
+<body>
+  <h1>Delete Category - Confirmation</h1>
+  <form method="post" action="" name="form">
+    <p>Are you sure you want to delete the following category?</p>
+
+    <p>Name: @prod.Name <br />
+    <p><input type="submit" value="Delete" /></p>
+  </form>
+    </body>
+</html>

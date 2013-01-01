@@ -1,0 +1,53 @@
+﻿@{
+    var ProductId = UrlData[0];
+        Cart c=null;
+    if (ProductId.IsEmpty()) 
+    {
+        Response.Redirect("~/Shared/Client/Carting.cshtml");
+    }
+    else
+    {
+        ProductId=Convert.ToInt32(UrlData[0].ToString());
+
+        c=Global.Get(ProductId);
+        if(Global.Exceptions==null)
+        {
+            
+        }
+        else
+        {
+            Response.Redirect("~/Shared/Client/Carting.cshtml");
+        }
+        if(IsPost)
+        {
+            Global.delete(ProductId);
+            if(Global.Exceptions!=null)
+            {
+                Response.Redirect("~/Shared/Client/DeleteFromCart.cshtml");
+            }
+            else
+            {
+                Response.Redirect("~/Shared/Client/Carting.cshtml");
+            }
+        }
+    }  
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title> Update Quantity</title>
+    </head>
+    <body>
+        <p>This item is going to be delete from your cart, Do you want to delete it? </p>
+         <p>@c.name </p>
+         <p>@c.description</p>
+         <p>@c.price</p>
+        
+        <input value="Delete" type="submit">
+
+        @Html.Label(@Global.Exceptions);
+    </body>
+</html>

@@ -1,0 +1,48 @@
+﻿@{
+    if(User.IsInRole("Admin"))
+    {
+  var db = Database.Open("WebSecurity");
+  var q = "SELECT * FROM Category ";
+    var data = db.Query(q);  
+    
+    Validation.RequireField("Name", "Category name is required.");
+  
+    var Name = Request.Form["Name"];
+
+    if (IsPost && Validation.IsValid()) {
+        // Define the insert query. The values to assign to the
+        // columns in the Product table are defined as parameters
+        // with the VALUES keyword.
+        if(ModelState.IsValid) {
+            var insertQuery = "INSERT INTO Category (Name) VALUES (@0)";
+            db.Execute(insertQuery, Name);
+            
+            Response.Redirect("~/Shared/Admin/CatList.cshtml");
+            }
+       }
+    }
+}
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <!--<meta charset="utf-8" />-->
+        
+        <title>Admin Page</title>
+    </head>
+    <body>
+        @Html.ValidationSummary("",new{})
+        <h1>ADD new Category </h1>
+        <form method="post">
+
+        Category Name: @Html.TextBox("Name",Request["Name"])<br/>
+           
+        <span><input type="submit" name="Sumbmit" value="Sumbmit" style="font-family: 'Baskerville Old Face';color: #4a1d1d"></span>
+     
+        
+       </form>
+   </body>
+</html>

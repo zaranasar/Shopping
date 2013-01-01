@@ -1,0 +1,57 @@
+﻿@{
+    Validation.RequireField("Name", "Category name is required.");
+    Validation.RequireField("Description", "Product description is required.");
+    Validation.RequireField("Price", "Product price is required.");
+
+    var db = Database.Open("SmallBakery");
+    var selectQueryString = "SELECT * FROM Product WHERE Id=@0";
+
+    var ProductId  = UrlData[0];
+    if (ProductId.IsEmpty()) {
+         Response.Redirect("~/EditProducts");
+    }
+
+    var row = db.QuerySingle(selectQueryString, ProductId);
+    var Name = row.Name;
+    var Description = row.Description;
+    var Price = row.Price;
+    
+    var uName = Request.Form["Name"];
+    var uDescription = Request.Form["Description"];
+    var uPrice = Request.Form["Price"];
+
+    
+    if (IsPost && Validation.IsValid()) {
+        var updateQueryString =
+            "UPDATE Product SET Name=@0, Description=@1, Price=@2 WHERE Id=@3" ;
+        db.Execute(updateQueryString, uName, uDescription, uPrice, ProductId);
+        Response.Redirect(@Href("~/Lecture13/4EditProducts"));
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Update Category</title>
+  <style type="text/css">
+     label { float: left; width: 8em; text-align: right;
+             margin-right: 0.5em;}
+     fieldset { padding: 1em; border: 1px solid; width: 35em;}
+     legend { padding: 2px 4px;  border: 1px solid; font-weight: bold;}
+     .validation-summary-errors {font-weight:bold; color:red; font-size:11pt;}
+  </style>
+</head>
+<body>
+  <h1>Update Product</h1>
+   @Html.ValidationSummary("Errors with your submission:")
+   <form method="post" action="">
+     <fieldset>
+       <legend>Update Category</legend>
+       <div>
+         <label>Name:</label>
+         <input name="Name" type="text" size="50" value="@Name" />
+       </div>
+       </fieldset>
+  </form>
+</body>
+</html>

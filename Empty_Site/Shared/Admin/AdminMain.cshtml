@@ -1,0 +1,37 @@
+﻿@{   
+   
+   var db = Database.Open("WebSecurity");
+   var q = "SELECT * FROM Product";
+   var data = db.Query(q);
+   var q1 = "SELECT * FROM Category";
+   var data1 = db.Query(q1);
+     
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Admin Main</title>
+    </head>
+    <body>
+        <h1>Product Entries</h1>
+        <table>
+            <thead><tr><th>Name</th><th>Product Price</th></tr> </thead>
+            <tbody>    
+           @foreach (var val in data)
+           {
+              <tr><td> @val.Name</td> <td> @val.Price></td></tr>
+           }
+            </tbody>   
+        </table>
+
+        <h1>Category Entries</h1>
+        
+            
+           @foreach (var val in data1)
+           {
+              <p>@val.Name</p> 
+           }   
+    </body>
+</html>

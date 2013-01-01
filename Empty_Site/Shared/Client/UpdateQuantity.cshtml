@@ -1,0 +1,47 @@
+﻿@{
+    if(IsPost)
+    {
+        var ProductId = UrlData[0];
+        var initialQuan=UrlData[1];
+        //int initialQuan=Convert.ToInt32(UrlData[1].ToString());
+
+        if (ProductId.IsEmpty() && initialQuan.IsEmpty()) 
+        {
+            Response.Redirect("~/Shared/Client/Carting.cshtml");
+        }
+        else
+        {
+            initialQuan=Convert.ToInt32(UrlData[1].ToString());
+            ProductId=Convert.ToInt32(UrlData[0].ToString());
+
+            var quan=Request.Form["Quan"];
+
+            Global.update(ProductId,initialQuan,quan);
+           if(Global.Exceptions!=null)
+           {
+               Response.Redirect("~/Shared/Client/UpdateQuantity.cshtml");
+           }
+           else
+           {
+               Response.Redirect("~/Shared/Client/Carting.cshtml");
+           }
+        }
+  
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title> Update Quantity</title>
+    </head>
+    <body>
+        Enter Quantity: @Html.TextBox("Quan",Request["Quan"]);
+
+        <input value="Update" type="submit">
+
+        @Html.Label(@Global.Exceptions);
+    </body>
+</html>

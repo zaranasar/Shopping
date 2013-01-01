@@ -1,0 +1,51 @@
+﻿@{
+    var db = Database.Open("WebSecurity");
+  var q = "SELECT * FROM PRODUCT where PID=@0";
+   
+  var ProductId  = UrlData[0];
+    if (ProductId.IsEmpty()) {
+         Response.Redirect("~/Shared/Admin/ProductList.cshtml");
+    }
+   
+   var row = db.QuerySingle(q, ProductId);
+    if(IsPost)
+    {
+        if(!User.Identity.IsAuthenticated)
+        {
+            Response.Redirect("~/Login.cshtml");
+        }
+        Global.list.Add(new Cart(Convert.ToInt32(row.PID.ToString()),row.Name.ToString(),row.Description.ToString(),Convert.ToDouble(row.Price.ToString()),Convert.ToInt32(row.Quantity.ToString()),row.Image.ToString()));
+        
+    }
+  }
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <div>
+            <img src="@Href("~/"+@row.Image)" alt="Imaage" width="400" height="300"></td></tr>
+            <h5>@row.Name</h5></td>
+            <h6>@row.Description</h6>
+            <h5>@row.Price</h5>
+            <h5>@row.Quantity</h5>
+         </div>
+
+        <input type="submit" value="Add To Cart" name="add"/>
+        <fieldset>
+            <legend>Share</legend>
+            <p>
+            @{ string currentUrl = Request.Url.ToString(); }
+            @Facebook.LikeButton(currentUrl,
+            width:230,
+            buttonLayout:"standard",
+            height:25,
+            showFaces:false)
+            </p>
+      </fieldset>
+    </body>
+</html>

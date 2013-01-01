@@ -1,0 +1,40 @@
+﻿@{
+      Layout="Shared/Client/_Layout.cshtml";
+var username = "";
+var password = "";
+var status="";
+if(IsPost)
+    {
+    username = Request["username"];
+    password = Request["pwd"];
+
+        if(WebSecurity.Login(username, password))
+        {
+          Response.Redirect("~/Default.cshtml");
+        }
+        else
+        {
+            status="Username or Password Incrorrect";        
+        }
+    }
+}
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <h1>Login</h1>
+        <form action="login" method="post">
+            Username: @Html.TextBox("username",Request["username"])<br/>
+            Password: @Html.TextBox("pwd",Request["pwd"],new {@type="password"})<br/>
+
+            <input type="submit" name="submitBtn" value="Submit">
+            @Html.Label(@status);
+        </form>
+    </body>
+</html>

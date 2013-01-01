@@ -1,0 +1,46 @@
+﻿@{
+    var Price="";
+    var data;
+    var db = Database.Open("WebSecurity");
+    var selectQueryString = "SELECT * FROM Product WHERE Price<=@0 AND Quantity>0";
+    if(IsPost)
+    {
+        Price=Request.Form["Price"];
+        data=db.Query(selectQueryString,Price);
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Products</title>
+    <style type="text/css">
+        table, th, td {
+          border: solid 1px #bbbbbb;
+          border-collapse: collapse;
+          padding: 2px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Products</h1>
+    Price: @Html.TextBox("Price",Request["Price"])
+
+    <table>
+    
+        @foreach(var val in data)
+        {
+            <tr>
+                <td>
+                    <img src="@(Href("~/" + @val.Image))" alt="Image">
+                </td>
+                <td> @val.Name</td>
+                <td> @val.Description</td>
+                <td> @val.Price</td>
+                
+            </tr>
+        }
+    </table>
+    <input type="submit" value="Search"/>
+
+</body>
+</html>

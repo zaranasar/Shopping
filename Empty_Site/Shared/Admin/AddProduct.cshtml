@@ -1,0 +1,92 @@
+﻿@{
+      var db = Database.Open("WebSecurity");
+      var q = "SELECT * FROM Category ";
+        var data = db.Query(q);  
+    
+        Validation.RequireField("Name", "Product name is required.");
+        Validation.RequireField("Description", "Product description is required.");
+        Validation.RequireField("Price", "Product price is required.");
+        Validation.RequireField("Quantity", "Product Quantity is required.");
+        Validation.RequireField("Image", "Image Path is required.");
+        Validation.Add("Price",Validator.Float("Enter Floating points/Integers"));
+        Validation.Add("Quantity",Validator.Integer("Enter Integers"));
+        
+        WebImage photo = null;
+        var newFileName = "";
+        var imagePath = "";
+    //if(User.IsInRole("Admin"))
+    {
+        if (IsPost && Validation.IsValid()) 
+        {
+            
+            var Name = Request.Form["Name"];
+            var Description = Request.Form["Description"];
+            var Price = Request.Form["Price"];
+            var Quantity= Request.Form["Quantity"];
+            var Category= Request.Form["categories"];
+                photo = WebImage.GetImageFromRequest();
+            if(photo != null){
+                newFileName =    Path.GetFileName(photo.FileName);
+            
+                imagePath = @"Images\" + newFileName;
+           
+                photo.Save(@"~\" + imagePath);
+            
+            }
+
+            if(ModelState.IsValid) 
+            {
+                var insertQuery = "INSERT INTO Product (Name, Description, Price, CID, Image, Quantity) " +
+                    "VALUES (@0, @1, @2, @3, @4,@5)";
+                db.Execute(insertQuery, Name, Description, Price,Category,imagePath,Quantity);
+            
+                Response.Redirect("~/Default.cshtml");        
+           }
+                else
+            {
+                Response.Redirect("~/Shared/Admin/AdminMain.cshtml");
+            }
+            }
+            
+        }
+}
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <!--<meta charset="utf-8" />-->
+        <title>Admin Page</title>
+    </head>
+    <body>
+        @Html.ValidationSummary("Submission")
+        <h1>Insert Product </h1>
+        <form method="post">
+
+        Product Name: @Html.TextBox("Name",Request["Name"])<br/>
+        Product Price: @Html.TextBox("Price",Request["Price"])<br/>
+        Product Description: @Html.TextBox("Description",Request["Description"])<br/>
+        Product Quantity: @Html.TextBox("Quantity",Request["Quantity"])<br/>
+        
+          <span> <select id="categories" name="categories" style="background-color: #ea6111" >
+  
+             @foreach(var val in data)
+              { 
+                <option SELECTED value=@val.CID  >@val.Name</option>
+              }
+                </select>  </span>  
+            
+       
+<fieldset>
+      <legend> Upload Image </legend>
+      <label for="Image">Image</label>
+      <input type="file" name="Imge" />
+      <br/>
+      </fieldset>
+
+            <input type="submit" value="Upload" />
+        </form>
+   </body>
+</html>

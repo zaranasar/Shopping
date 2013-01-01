@@ -1,0 +1,60 @@
+﻿@{
+    Session["Count"]=1;
+    var db = Database.Open("WebSecurity");
+    var q = "SELECT * FROM Product ";
+    var data = db.Query(q);  
+    int limit=10;
+    int size=data.ToList().Count;
+    int i=0;
+    if(IsPost)
+    {
+     
+    }
+  }
+
+<!DOCTYPE html>
+
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <link href="~/Styles/js-image-slider.css" rel="stylesheet" type="text/css" />
+        <script src="~/Scripts/js-image-slider.js" type="text/javascript"></script>
+        <link href="~/Styles/generic.css" rel="stylesheet" type="text/css" />
+
+    </head>
+        
+    <body>
+    <div id="sliderFrame">
+        <div id="slider">
+            <img style="background-color: #b6ff00"  src="~/Images/image1.jpg"  alt="Image1" width="700" height="306">
+            <img src="~/Images/imagee2.jpg" alt="Image2" width="700" height="306">
+            <img src="~/Images/image5.jpg" alt="Image3" width="700" height="306">
+            <img src="~/Images/imagee4.jpg" alt="image4" width="700" height="306">
+            
+        </div>
+        
+    </div>
+        <table>
+       @for(int c=0;c<limit;c++,i++)
+       {
+           if(@i < @size)
+           {
+             <tr>
+                 <td>  
+                        <p>Image : </p><img src="@Href("~/"+@data.ElementAt(i).Image)" alt="item"> 
+                 </td>
+              </tr>
+                <tr><td>Name: @data.ElementAt(i).Name</td></tr>
+                <tr><td>Price: @data.ElementAt(i).Price</td></tr>
+                <tr>
+                  <td><a href="@Href("~/Shared/Client/ProductDetail.cshtml", @data.ElementAt(i).PId)">View Details</a></td>
+                </tr>
+            }
+       }
+       </table>
+
+        <input type="submit" value="Next" name="Next">
+    </body>
+</html>

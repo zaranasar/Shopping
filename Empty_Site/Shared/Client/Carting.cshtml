@@ -1,0 +1,42 @@
+﻿@{
+    if(IsPost)
+    {
+        if(Global.list!=null)
+        {
+            Response.Redirect("~/Shared/Client/Payment.cshtml");
+        }
+        else
+        {
+            <p>You have bought nothing.....</p>
+        }
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+    </head>
+    <body>
+        
+        <table>
+            @foreach(var val in Global.list)
+            {
+                <tr>
+                    <td><img src=@Href("~/"+val.path) alt="Image" width="60" height="60"></td>
+                    <td>@val.name</td>
+                    <td>@val.description</td>
+                    <td>@val.price</td>
+                    <td>@val.quantity</td>
+                    <td><a href="@Href("~/Shared/Client/Lecture13/UpdateQuantity.cshtml", val.PID,val.quantity)">Update Quantity</a></td>
+                    <td><a href="@Href("~/Shared/Client/Lecture13/DeleteFromCart.cshtml", val.PID)">Delete Item</a></td>
+            </tr>
+            }
+            </table>
+
+        <input type="submit" value="CheckOut" name="checkout">
+        <a href="~/Shred/Client/ProductList.cshtml">Return to Product Page</a>
+    </body>
+</html>

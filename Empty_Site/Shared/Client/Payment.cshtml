@@ -1,0 +1,61 @@
+﻿@{
+   var sum=0;
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Invoice</title>
+    </head>
+
+    <body>
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+              <input type="hidden" name="cmd" value="_cart">
+<input type="hidden" name="upload" value="1">
+<input type="hidden" name="business"
+value="zara.n_1357056869_per@yahoo.com">
+              
+            <table ><tr><td><h2>Order Details</h2> </tr>
+                <tr> 
+                    <th class="product">Product</th> 
+                    <th class="size">Quantity</th> 
+                    <th class="price">Price</th> 
+                </tr>
+                @foreach(var val in Global.list)
+                    {
+                     <tr>     
+                        <td class="product">@item.Name</td> 
+                        <td class="qt">@prods[key]</td> 
+                        <td class="price">@item.Price</td> 
+                    </tr> 
+                        
+                 }
+                
+            </table>
+                @foreach(var val in Global.list)
+                    {
+                             
+                        <input type="hidden" name="item_name_@count"
+                        value="@val.name">
+                        <input type="hidden" name="amount_@count" value="@val.price">
+                        
+                    }
+               <table>     
+                <tr class="cartTotal"> 
+                <td></td>
+                <td>Total:</td> 
+                <td> @Session["totalPrice"]</td> 
+                </tr>  
+                <tr> 
+                <td></td>
+                <td><input type="image"
+                src="https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif"
+                 name="submit" alt=""></td> 
+                <td></td> 
+                </tr>   
+              </table>
+        </form>    
+    </body>
+</html>

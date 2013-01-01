@@ -1,0 +1,98 @@
+﻿@{
+         Layout="~/Shared/Client/_Layout.cshtml";
+
+var username = "";
+var password1 = "";
+var password2 = "";
+
+Validation.RequireField("username", "User name is required");
+Validation.RequireField("firstname", "First name is required");
+Validation.RequireField("email", "Email is required");
+Validation.RequireField("lastname", "Last name is required");
+Validation.RequireField("pwd", "Password is required");
+Validation.RequireField("conpwd", "Password is required");
+Validation.Add("birthdate", Validator.DateTime("Birth date must be a date"));
+
+if(IsPost && Validation.IsValid())
+{
+    
+ //WebSecurity.Logout();
+username = Request.Form["username"];
+password1 = Request.Form["pwd"];
+password2 = Request.Form["conpwd"];
+var birth=Request.Form["birthdate"];
+var first=Request.Form["firstname"];
+var last=Request.Form["lastname"];
+var town=Request.Form["town"];
+var email=Request.Form["email"];
+var country=Request.Form["country"];
+        if(!WebSecurity.UserExists(username))
+        {
+            WebSecurity.CreateUserAndAccount(username, password1);
+            var insertQuery = "INSERT INTO Product (UserName,FName,LName,Email,Town,Country,BirthDate) " +
+                    "VALUES (@0, @1, @2, @3, @4,@5,@6)";
+            db.Execute(insertQuery,username, first, last, email,town,country,birth);
+            Roles.AddUserToRole("username", "User");
+            Response.Redirect("~/Shared/Client/ProductList.cshtml");
+        }
+    }
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Sign Up for Paradise Shopping Site</title>
+    
+    <script src="~/Scripts/jquery-1.6.2.js"></script>
+    <script src="~/Scripts/jquery.validate.js"> </script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+</head>
+        
+<body>
+    @Html.ValidationSummary("Errors in submission")
+        <h1>Register</h1>
+        <form method="post">
+
+            First Name: @Html.TextBox("firstname",Request["firstname"])<br />
+            
+            
+            Last Name: @Html.TextBox("lastname", Request["lastname"])<br />
+            
+            Town: @Html.TextBox("town", Request["town"])<br />
+            <!--@Validation.For("town")
+            @Html.ValidationMessage("town")
+            -->
+            Country: @Html.TextBox("country", Request["country"])<br />
+            <!--@Validation.For("country")
+            @Html.ValidationMessage("country")
+            -->
+            User Name: @Html.TextBox("username", Request["username"])<br />
+            <!--@Validation.For("username")
+            @Html.ValidationMessage("username")
+            -->
+            Date Of Birth  :@Html.TextBox("birthdate",Request["birthdate"])<br/>
+            <!--@Html.ValidationMessage("birhtdate")
+            -->
+            Password: @Html.TextBox("pwd", Request["pwd"],new {@type="password"})<br />
+            <!--@Validation.For("pwd")
+            @Html.ValidationMessage("pwd")
+            -->
+            Confirm Password: @Html.TextBox("conpwd", Request["conpwd"],new {@type="password"})<br />
+            <!--@Validation.For("conpwd")
+            @Html.ValidationMessage("conpwd")
+            -->
+            Email address: @Html.TextBox("email", Request["email"])<br />
+            <!--@Validation.For("email")
+            @Html.ValidationMessage("email")
+            -->
+            @Html.Label("Gender")
+            <input type="radio" name="group1" value="Male"> Male
+            <input type="radio" name="group1" value="Female" checked> Female
+            <br/>
+            <input type="submit" value="Register" >
+            
+        </form>
+    </body>
+</html>
